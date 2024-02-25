@@ -14,7 +14,7 @@ prodRoute.get("/:pid", async (req, res) => {
 
 // Busqueda de Products con paginate y filtro
 prodRoute.get("/", async (req,res)=>{
-  const { limit = 7, page = 1, category, sort = 1 } = req.query;
+  const { limit = 7, page = 1, category = true, sort = 1 } = req.query;
   //return res.send(await MongoProductManager.getProducts(limit,page,category,sort))
 
 const options = {
@@ -36,7 +36,7 @@ const options = {
       hasNextPage,
       nextPage,
       prevPage,
-    } = await productModel.paginate({title: filter}, {options})
+    } = await productModel.paginate({status: category}, {options})
 
     
 
@@ -51,6 +51,7 @@ const options = {
       totalPages: totalPages,
       hasPrevPage: hasPrevPage,
       hasNextPage: hasNextPage,
+     
     })
 
   }  catch (error) {

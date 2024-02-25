@@ -7,7 +7,8 @@
             <th scope="col">Título</th>
             <th scope="col">Descripción</th>
             <th scope="col">Precio
-             <a href="/products?page={{page}}&sort={{sort}}"><button  type="button" class="btn btn-outline-primary btn-sm"> ordenar precio </button></a></th>
+                <a href="/products?page={{page}}&sort={{sort}}"><button  type="button" class="btn btn-outline-primary btn-sm"> ordenar precio </button></a>
+                </th>
             <th scope="col">Thumbnail</th>
             <th scope="col">Código</th>
             <th scope="col">Stock</th>
@@ -33,16 +34,14 @@
 
 <div class="botonera">
 {{#if hasPrevPage}}
-<a href="/products?page={{prevPage}}"> <button  type="button" class="btn btn-primary">Pagina previa</button></a>
+<a href="{{prevLink}}"> <button  type="button" class="btn btn-primary">Pagina previa</button></a>
 {{/if}}
 
 <h5 class="numeracion">Pagina {{page}} de {{totalPages}}</h5>
 
 {{#if hasNextPage}}
-<a href="/products?page={{nextPage}}"><button  type="button" class="btn btn-primary"> Pagina siguiente</button></a>
+<a href="{{nextLink}}"><button  type="button" class="btn btn-primary"> Pagina siguiente</button></a>
 {{/if}}
-
-
-
 </div>
+
 </container>

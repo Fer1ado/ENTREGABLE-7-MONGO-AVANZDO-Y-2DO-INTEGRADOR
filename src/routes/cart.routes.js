@@ -45,7 +45,7 @@ cartRoute.delete("/:cid/product/:pid",async (req, res) => {
 cartRoute.put("/:cid",async (req, res) => {
     const cid = req.params.cid
     const array = req.body;
-    res.send(await MongoCartManager.addAndUpdateCart(cid,array));
+    res.send(await MongoCartManager.updateCartWithProducts(cid,array));
 })
 
 

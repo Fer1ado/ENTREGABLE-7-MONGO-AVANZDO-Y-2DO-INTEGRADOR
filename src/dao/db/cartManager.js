@@ -64,7 +64,43 @@ class CartDAO {
     }
 
     //actualizacion de carrito por array
+    async updateCartWithProducts(cid, productsArray) {
+        console.log("Actualizando carrito con los siguientes productos:", productsArray);
+        const cart = await this.getCarrito(cid);
+        
+        try {
+        if (!cart) {
+            throw new Error({status:"failed", message: "Cart not found"});
+        }
     
+        // Para cada producto en el array de entrada
+        for (let prod of productsArray) {
+            // Verifica si el producto existe
+            const exists = await productModel.findById(prod.product);
+            if (!exists || exists.status === false) {
+                throw new Error({status: "failed", message: `Not able to add non-existing product with ID: ${prod.id_prod} to the cart`});
+            }
+            // Verifica si el producto ya existe en el carrito
+            const index = cart[0].products.findIndex(cartProduct => cartProduct.product.toString() === prod.product);
+            console.log(index)
+            if (index !== -1) {
+                // Si ya existe, actualizamos la cantidad
+                cart.products[index].quantity = prod.quantity + cart.products[index].quantity;
+            } else {
+                console.log(prod)
+                cart[0].products.push(prod);
+                await this.addAndUpdateCart(cid, prod.product, prod.quantity);
+            }
+        }
+        
+        const cart2 = await cartModel.find({_id : cid}).populate("products.product",{title: 1, price: 1,stock:1, code: 1})
+        return {status:"success", message:"Cart updated successfully", cart2}
+
+        } catch (error) {
+            return{status: "failed", message: error.message}
+        }
+        
+    }
 
     async deleteProductById(cid, prodId) {
         try{
@@ -86,7 +122,6 @@ class CartDAO {
             throw new Error(`NO EXISTE EL PRODUCTO CON ID ${prodId} EN EL CARRITO SELECCIONADO`)
         }
 
-        //console.log(cart)
         await cartModel.findOneAndUpdate({_id : cid}, cart)
         return {status: "success", message: "PRODUCTO ELIMINADO DEL CARRITO EXITOSAMENTE", producto: cart}
 

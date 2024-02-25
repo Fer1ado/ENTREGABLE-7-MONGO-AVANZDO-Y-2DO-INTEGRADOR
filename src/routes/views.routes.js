@@ -33,20 +33,18 @@ viewsRoute.get("/realtimeproducts", (req, res) => {
   
   // vista de productos en handlebars con boton comprar
   viewsRoute.get("/products", async (req, res) => {
-    const { page = 1, limit = 20 , sort , filter} = req.query
+    const { page = 1, limit = 20 , sort , filter = true} = req.query
     try {
 
     const sortTogle = (sort) =>{
       let srt = parseInt(sort)
-      console.log(srt)
-      console.log(sort)
       if(sort === undefined) return 1
       else { return srt *= -1 }
       }
   
       const sorting = sortTogle(sort)
 
-      const response = await productModel.paginate({filter},{limit: limit, page: page, sort: {price: sorting}})
+      const response = await productModel.paginate({status: filter},{limit: limit, page: page, sort: {price: sorting}})
 
       if(page > response.totalPages){
         return res.json({status: "failed", message: "LA PAGINA SELECCIONADA NO EXISTE"})
@@ -66,7 +64,7 @@ viewsRoute.get("/realtimeproducts", (req, res) => {
         stock: doc.stock,
         code: doc.code
       }})
-       
+
       //paso el objeto plano al view de handlebars
       res.render("products", {
           docs: products,
@@ -77,14 +75,17 @@ viewsRoute.get("/realtimeproducts", (req, res) => {
           totalPages: response.totalPages,
           hasPrevPage: response.hasPrevPage,
           hasNextPage: response.hasNextPage,
+          prevLink: `?page=${response.prevPage}`,
+          nextLink: `?page=${response.nextPage}`,
       })
+      
 
     } catch (error) {
       return res.json({status: "failed", error: error.message})
     }
   });
 
-  //Vista de carrito interactiva con productos (probando que se podía hacer en handlebars, actualiza carrito cada vez que renderiza pagina)
+//Vista de carrito interactiva con productos (probando que se podía hacer en handlebars, actualiza carrito cada vez que renderiza pagina)
   viewsRoute.post("/products/api/cart/:cid/product/:pid", async (req, res) => {
     try {
       const pid = req.params.pid;
@@ -106,15 +107,15 @@ viewsRoute.get("/realtimeproducts", (req, res) => {
       res.render("cart", {
         cart: cid,
         item: cartUp,
+        deleteBtn: "btn btn-outline-primary disabled"
       })
       
     } catch (error) {
       return res.json({status: "failed", error: error.message})
     }
-
   })
 
-  //Vista de carrito con ruta GET como pide el desafio
+//Vista de carrito con ruta GET como pide el desafio
   viewsRoute.get("/cart/:cid", async (req, res) => {
     try {
       const cid = req.params.cid
@@ -140,5 +141,6 @@ viewsRoute.get("/realtimeproducts", (req, res) => {
       return res.json({status: "failed", error: error.message})}
     }) 
 
+    
 export default viewsRoute;
 

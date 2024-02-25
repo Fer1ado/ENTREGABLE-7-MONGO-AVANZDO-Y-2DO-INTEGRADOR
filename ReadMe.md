@@ -9,13 +9,13 @@
 <br>
 
 
-| METHOD              | ROUTE | DESCRIPCION |
-| :---------------- | :------: | :------: |
+| METODO             | RUTA | DESCRIPCION | COMMENTARIOS
+| :---------------- | :------: | :------: | :------: |
 | GET       |   localhost:8080/api/products/:pid   | busqueda de productos en carrito por ID |
-| GET POST            |    localhost:8080/api/products    | listar y agregar productos a la BD |
+| GET POST            |    localhost:8080/api/products    | listar y agregar productos a la BD  | agregado pagginate, sort, limit y filtro por status (default = true)
 | POST  |  localhost:8080/api/products/many    |  ruta de inserción masiva de productos a la BD |
 | PUT DELETE   |  localhost:8080/api/products/:id    | rutas de modificación y eliminación de products de la BD |
-| GET PUT DELETE |  localhost:8080/api/cart/:cid   | rutas de busqueda y edicion por array de productos en la BD |
+| GET PUT DELETE |  localhost:8080/api/cart/:cid   | rutas de busqueda, edicion por array de productos y eliminación de carrito en la BD | Edición por array tiene que ser con el siguiente formato [{product: id, quantity: Intg},{},{}... todos los prods]
 | GET POST |  /api/cart   | ruta de busqueda y creación de carritos |
 | POST PUT DELETE  |  localhost:8080/api/cart/:cid/product/:pid   |  rutas de busqueda edicion y creación de productos dentro de carrito especifico en la BD |
 | GET |  localhost:8080/home     | ruta view de home Handlebars | 
